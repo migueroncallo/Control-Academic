@@ -7,18 +7,68 @@
 //
 
 import UIKit
+import SlideMenuControllerSwift
+import Firebase
+import UserNotifications
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    let defaults = UserDefaults.standard
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+//        // [START register_for_notifications]
+//        if #available(iOS 10.0, *) {
+//            // For iOS 10 display notification (sent via APNS)
+//            UNUserNotificationCenter.current().delegate = self
+//            
+//            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+//            UNUserNotificationCenter.current().requestAuthorization(
+//                options: authOptions,
+//                completionHandler: {_, _ in })
+//            
+//            // For iOS 10 data message (sent via FCM)
+//            FIRMessaging.messaging().remoteMessageDelegate = self
+//            
+//        } else {
+//            let settings: UIUserNotificationSettings =
+//                UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+//            application.registerUserNotificationSettings(settings)
+//        }
+//        
+//        application.registerForRemoteNotifications()
+//        
+//        // [END register_for_notifications]
+//        FIRApp.configure()
+        
+       
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        if !self.defaults.bool(forKey: "logged"){
+            let vc = storyboard.instantiateViewController(withIdentifier: "Departamento VC") as! ViewController
+            self.window?.rootViewController = vc
+        }else{
+            let mainViewController = storyboard.instantiateViewController(withIdentifier: "Main Menu VC") as! MainMenuController
+            let leftViewController = storyboard.instantiateViewController(withIdentifier: "Left Menu VC") as! LeftMenuController
+            let nvc = UINavigationController(rootViewController: mainViewController)
+
+            let slideMenuController = SlideMenuController(mainViewController: nvc, leftMenuViewController: leftViewController)
+            self.window?.rootViewController = slideMenuController
+            self.window?.makeKeyAndVisible()
+            DataService.sharedInstance.initData()
+
+        }
+        
         return true
     }
 
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -41,6 +91,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    class func getDelegate() -> AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
+    }
 }
 
+//// [START ios_10_message_handling]
+//@available(iOS 10, *)
+//extension AppDelegate : UNUserNotificationCenterDelegate {
+//    
+//    // Receive displayed notifications for iOS 10 devices.
+//    func userNotificationCenter(_ center: UNUserNotificationCenter,
+//                                willPresent notification: UNNotification,
+//                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//        let userInfo = notification.request.content.userInfo
+//        // Print message ID.
+////        if let messageID = userInfo[gcmMessageIDKey] {
+////            print("Message ID: \(messageID)")
+////        }
+//        
+//        // Print full message.
+//        print(userInfo)
+//        
+//        // Change this to your preferred presentation option
+//        completionHandler([])
+//    }
+//    
+//    func userNotificationCenter(_ center: UNUserNotificationCenter,
+//                                didReceive response: UNNotificationResponse,
+//                                withCompletionHandler completionHandler: @escaping () -> Void) {
+//        let userInfo = response.notification.request.content.userInfo
+//        // Print message ID.
+////        if let messageID = userInfo[gcmMessageIDKey] {
+////            print("Message ID: \(messageID)")
+////        }
+//        
+//        // Print full message.
+//        print(userInfo)
+//        
+//        completionHandler()
+//    }
+//}
+//// [END ios_10_message_handling]
+//// [START ios_10_data_message_handling]
+//extension AppDelegate : FIRMessagingDelegate {
+//    // Receive data message on iOS 10 devices while app is in the foreground.
+//    func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
+//        print(remoteMessage.appData)
+//    }
+//}
+//// [END ios_10_data_message_handling]
