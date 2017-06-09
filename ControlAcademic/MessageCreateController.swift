@@ -15,6 +15,7 @@ class MessageCreateController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet var fromLabel: UILabel!
     
+    @IBOutlet weak var externalSwitch: UISwitch!
 
     @IBOutlet var addContactsButton: UIButton!
     
@@ -98,7 +99,12 @@ class MessageCreateController: UIViewController, NVActivityIndicatorViewable {
             for d in destinatario{
                 receptor = receptor + "\(d.cod!),"
             }
-        DataService.sharedInstance.sendMessage(subjectTextField.text!, "", receptor, messageTextView.text, "1", cb: {success in
+            
+            var tipo = "1"
+            if externalSwitch.isOn{
+                tipo = "2"
+            }
+        DataService.sharedInstance.sendMessage(subjectTextField.text!, "", receptor, messageTextView.text, tipo, cb: {success in
             if success{
                 self.navigationController?.popViewController(animated: true)
                 

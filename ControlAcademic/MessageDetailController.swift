@@ -19,6 +19,8 @@ class MessageDetailController: UIViewController, NVActivityIndicatorViewable,QLP
     
     @IBOutlet var messageWebView: UIWebView!
     
+    @IBOutlet weak var fechaLabel: UILabel!
+    
     var message: Mensaje!
     
     var archivos = [Archivo]()
@@ -29,8 +31,10 @@ class MessageDetailController: UIViewController, NVActivityIndicatorViewable,QLP
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         messageWebView.scalesPageToFit = true
         messageWebView.contentMode = UIViewContentMode.scaleAspectFit
+        fechaLabel.text = message.fecha
         
         if message.adjunto == 1{
             self.startAnimating(message: "Cargando adjunto", type: NVActivityIndicatorType.ballClipRotate)
@@ -50,7 +54,10 @@ class MessageDetailController: UIViewController, NVActivityIndicatorViewable,QLP
         }
         setNavigationBar()
         senderLabel.text = message.emisor
+        senderLabel.sizeToFit()
         subjectLabel.text = message.asunto
+        subjectLabel.sizeToFit()
+        
         
         messageWebView.loadHTMLString(message.mensaje, baseURL: nil)
         

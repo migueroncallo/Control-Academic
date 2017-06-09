@@ -89,6 +89,8 @@ class DataService{
         }
         Alamofire.request(url!, method: .get, encoding: JSONEncoding.default).validate().responseJSON { (response) in
             
+            print("Colegios : \(response)")
+            
             switch response.result{
             case .success:
                 if let value = response.result.value{
@@ -112,6 +114,7 @@ class DataService{
                                 self.colegios.append(colegio)
                             }
                         }
+                        
                         self.realm.beginWrite()
                         self.realm.add(self.colegios)
                         try! self.realm.commitWrite()
@@ -800,6 +803,13 @@ class DataService{
         print("Hijo seleccionado: \(self.realm.objects(Estudiante.self).filter("codestudiante == '\(s)'").first!)")
         self.colegioSelected = self.realm.objects(Colegio.self).filter("link == '\(c)'").first!
         self.modulos = Array(self.realm.objects(Modulo.self))
+        self.loadMessages(1) { (error, mensajes) in
+            if let _ = error{
+                
+            }else{
+                self.mensajes = mensajes!
+            }
+        }
     }
     
     func logout(cb: @escaping()->()){

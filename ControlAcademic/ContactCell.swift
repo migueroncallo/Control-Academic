@@ -18,6 +18,14 @@ class ContactCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        if selected{
+            self.backgroundColor = UIColor.green
+        }else{
+            self.backgroundColor = UIColor.white
+        }
+    }
 
     func config(_ contacto: Contacto){
         contactLabel.text = "\(contacto.nombres!) \(contacto.apellidos!)"

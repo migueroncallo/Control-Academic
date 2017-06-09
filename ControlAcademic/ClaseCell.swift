@@ -37,17 +37,24 @@ class ClaseCell: UITableViewCell {
     func config(_ horario: Horario){
         
         self.ordenLabel.text = "\(horario.orden!)"
-        
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "HH:MM:ss"
-//        let dateStart = dateFormatter.date(from: horario.horaini)
-//        
-//        dateFormatter.dateFormat = "h:mm a"
 
-//        self.horaInicioLabel.text = horario.horaini
         
-        self.horaInicioLabel.text = horario.horaini
-        self.horaFinLabel.text = horario.horafin
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "HH:mm:ss"
+        
+        let time = dateFormatter.date(from: horario.horaini)
+        
+        let time2 = dateFormatter.date(from: horario.horafin)
+        dateFormatter.dateFormat = "h:mm a"
+        dateFormatter.amSymbol = "am"
+        dateFormatter.pmSymbol = "pm"
+        
+        let dateString = dateFormatter.string(from: time!)
+        let date2String = dateFormatter.string(from: time2!)
+        self.horaInicioLabel.text = dateString
+        self.horaFinLabel.text = date2String
+        
         if let a = horario.asignatura{
             self.asignaturaLabel.text = a
         }else{

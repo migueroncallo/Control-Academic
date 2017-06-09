@@ -8,6 +8,7 @@
 
 import UIKit
 import NVActivityIndicatorView
+import SlideMenuControllerSwift
 
 class LogInController: UIViewController, NVActivityIndicatorViewable {
 
@@ -21,6 +22,8 @@ class LogInController: UIViewController, NVActivityIndicatorViewable {
     @IBOutlet var passwordTextField: UITextField!
     
     @IBOutlet var logInButton: UIButton!
+    
+    let screenSize: CGRect = UIScreen.main.bounds
     
     let defaults = UserDefaults.standard
     
@@ -68,7 +71,7 @@ class LogInController: UIViewController, NVActivityIndicatorViewable {
                     self.present(vc, animated: true, completion: nil)
                     
                 }else if user!.codtipousuario == "2"{
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "Main Menu VC") as! UINavigationController
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "Main Menu VC") as! MainMenuController
                     DataService.sharedInstance.loadStudent(user!.cod, { (error, student) in
                         self.stopAnimating()
                         if let e = error{
@@ -76,8 +79,7 @@ class LogInController: UIViewController, NVActivityIndicatorViewable {
                         }else{
                             DataService.sharedInstance.studentSelected = student!
                             self.defaults.set(true, forKey: "logged")
-                            self.present(vc, animated: true, completion: nil)
-
+                            self.createMenuView()
                         }
                     })
                     
@@ -91,6 +93,26 @@ class LogInController: UIViewController, NVActivityIndicatorViewable {
             }
             
         }
+    }
+    
+    func createMenuView() {
+        
+        // create viewController code...
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let mainViewController = storyboard.instantiateViewController(withIdentifier: "Main Menu VC") as! MainMenuController
+        let leftViewController = storyboard.instantiateViewController(withIdentifier: "Left Menu VC") as! LeftMenuController
+        
+        
+        let nvc = UINavigationController(rootViewController: mainViewController)
+        
+        
+        SlideMenuOptions.leftViewWidth = screenSize.width*0.75
+        
+        let slideMenuController = SlideMenuController(mainViewController:nvc, leftMenuViewController: leftViewController)
+        slideMenuController.delegate = mainViewController
+        AppDelegate.getDelegate().window?.rootViewController = slideMenuController
+        AppDelegate.getDelegate().window?.makeKeyAndVisible()
     }
     
 }

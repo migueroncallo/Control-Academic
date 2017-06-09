@@ -50,8 +50,13 @@ class MensajeCell: UITableViewCell {
         self.initialsLabel.text = "\(mensaje.emisor.characters.first!)"
         
         self.emisorLabel.text = mensaje.emisor
-        
         self.asuntoLabel.text = mensaje.asunto
+
+        if mensaje.codestado == 1{
+            self.asuntoLabel.font = UIFont.boldSystemFont(ofSize: 12)
+        }else{
+            self.asuntoLabel.font = UIFont.systemFont(ofSize: 12)
+        }
         self.fechaLabel.text = mensaje.fecha
         
         switch self.initialsLabel.text! {

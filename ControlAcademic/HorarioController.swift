@@ -25,6 +25,8 @@ class HorarioController: UIViewController, NVActivityIndicatorViewable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setNavigationBarItem()
+
         self.setNavigationBar()
         self.tableView.tableFooterView = UIView()
         self.tableView.delegate = self
@@ -107,7 +109,7 @@ class HorarioController: UIViewController, NVActivityIndicatorViewable {
         titleLabel.textColor = UIColor.white
         
         self.navigationItem.titleView = titleLabel
-        
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Atrás", style: .plain, target: self, action: nil)
         
         self.navigationController?.navigationBar.barTintColor = UIColor(red: 55/255, green: 106/255, blue: 211/255, alpha: 1.0)
         self.navigationController?.navigationBar.isTranslucent = false

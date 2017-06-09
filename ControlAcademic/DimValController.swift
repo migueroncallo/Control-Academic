@@ -25,6 +25,8 @@ class DimValController: UIViewController, NVActivityIndicatorViewable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        setNavigationBarItem()
+
         dropDown.anchorView = periodoLabel
         dropDown.direction = .bottom
         

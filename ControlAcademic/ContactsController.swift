@@ -28,17 +28,31 @@ class ContactsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
+        
+        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.save(_:)))
+        self.navigationItem.rightBarButtonItem = saveButton
 
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        DataService.sharedInstance.destinatario = seleccionados
+        for s in seleccionados{
+            DataService.sharedInstance.destinatario.append(s)
+
+        }
     }
     //MARK: Button actions
 
     @IBAction func close(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func save(_ sender: UIBarButtonItem){
+        seleccionados.removeAll()
+        for i in self.tableView.indexPathsForSelectedRows!{
+            seleccionados.append(contactos[i.row])
+        }
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -72,47 +86,47 @@ extension ContactsController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         
-        if !searchActive{
-            if seleccionados.contains(where: { (contacto) -> Bool in
-                contacto === contactos[indexPath.row]
-            }){
-                for i in 0..<seleccionados.count  {
-                    if seleccionados[i] === contactos[indexPath.row]{
-                        seleccionados.remove(at: i)
-                        print("Contacto eliminado")
-                        
-                    }
-                }
-            }else{
-                seleccionados.append(contactos[indexPath.row])
-                print("Contacto añadido")
-            }
-        }else{
-            if seleccionados.contains(where: { (contacto) -> Bool in
-                contacto === filtered[indexPath.row]
-            }){
-                for i in 0..<seleccionados.count  {
-                    if seleccionados[i] === filtered[indexPath.row]{
-                        seleccionados.remove(at: i)
-                        print("Contacto eliminado")
-                        
-                    }
-                }
-            }else{
-                seleccionados.append(filtered[indexPath.row])
-                print("Contacto añadido")
-            }
-        }
-        let cell  = tableView.cellForRow(at: indexPath) as! ContactCell
-
-        
-        DispatchQueue.main.async {
-            if self.searchActive{
-                cell.config(self.filtered[indexPath.row])
-            }else{
-                cell.config(self.contactos[indexPath.row])
-            }
-        }
+//        if !searchActive{
+//            if seleccionados.contains(where: { (contacto) -> Bool in
+//                contacto === contactos[indexPath.row]
+//            }){
+//                for i in 0..<seleccionados.count  {
+//                    if seleccionados[i] === contactos[indexPath.row]{
+//                        seleccionados.remove(at: i)
+//                        print("Contacto eliminado")
+//                        
+//                    }
+//                }
+//            }else{
+//                seleccionados.append(contactos[indexPath.row])
+//                print("Contacto añadido")
+//            }
+//        }else{
+//            if seleccionados.contains(where: { (contacto) -> Bool in
+//                contacto === filtered[indexPath.row]
+//            }){
+//                for i in 0..<seleccionados.count  {
+//                    if seleccionados[i] === filtered[indexPath.row]{
+//                        seleccionados.remove(at: i)
+//                        print("Contacto eliminado")
+//                        
+//                    }
+//                }
+//            }else{
+//                seleccionados.append(filtered[indexPath.row])
+//                print("Contacto añadido")
+//            }
+//        }
+//        let cell  = tableView.cellForRow(at: indexPath) as! ContactCell
+//
+//        
+//        DispatchQueue.main.async {
+//            if self.searchActive{
+//                cell.config(self.filtered[indexPath.row])
+//            }else{
+//                cell.config(self.contactos[indexPath.row])
+//            }
+//        }
         
     }
     

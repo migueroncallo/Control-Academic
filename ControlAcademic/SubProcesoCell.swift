@@ -56,10 +56,9 @@ class SubProcesoCell: UITableViewCell {
                 let noteFrame = CGRect(x: self.notasView.frame.width - 28, y: lbl.frame.height + spacing, width: 20, height: 20)
                 noteLbl.frame = noteFrame
                 noteLbl.text = nota.notaEstud.nota
-//                noteLbl.sizeToFit()
+                noteLbl.sizeToFit()
                 totalHeight += Double(noteLbl.frame.height)
-                spacing = spacing + 8
-                totalHeight += Double(spacing)
+                spacing = spacing + 10
                 
                 let fechaLbl = UILabel()
                 fechaLbl.font = fechaLbl.font.withSize(15)
@@ -70,8 +69,7 @@ class SubProcesoCell: UITableViewCell {
                 fechaLbl.font = UIFont.systemFont(ofSize: 12)
                 fechaLbl.sizeToFit()
                 
-                totalHeight += Double(fechaLbl.frame.height)
-                spacing = spacing + 15 + fechaLbl.frame.height + 8
+                spacing = spacing + 15 + fechaLbl.frame.height + 10
                 self.notasView.addSubview(lbl)
                 self.notasView.addSubview(noteLbl)
                 self.notasView.addSubview(fechaLbl)
@@ -80,7 +78,7 @@ class SubProcesoCell: UITableViewCell {
             }
             
             
-            self.heightConstraint.constant = CGFloat(30 * self.labels)
+            self.heightConstraint.constant = CGFloat(28 * self.labels)
             set = true
         }
         

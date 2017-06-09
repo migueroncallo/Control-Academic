@@ -15,11 +15,15 @@ class MensajeController: UIViewController, NVActivityIndicatorViewable {
     
     @IBOutlet var segmentedControl: UISegmentedControl!
     
+    @IBOutlet weak var warningLabel: UILabel!
+    
     
     var mensajes = [Mensaje]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        setNavigationBarItem()
 
         tableView.tableFooterView = UIView()
         self.setNavigationBar()
@@ -63,6 +67,7 @@ class MensajeController: UIViewController, NVActivityIndicatorViewable {
         titleLabel.textColor = UIColor.white
         
         self.navigationItem.titleView = titleLabel
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Atrás", style: .plain, target: self, action: nil)
         
         let messageButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(self.newMessage(_:)))
         
@@ -148,6 +153,15 @@ extension MensajeController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if mensajes.count == 0{
+            self.warningLabel.isHidden = false
+            self.tableView.isHidden = true
+        }else{
+            self.warningLabel.isHidden = true
+            self.tableView.isHidden = false
+        }
+        
         return self.mensajes.count
     }
     
@@ -157,5 +171,13 @@ extension MensajeController: UITableViewDelegate, UITableViewDataSource{
         cell.config(self.mensajes[indexPath.row])
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
 }
